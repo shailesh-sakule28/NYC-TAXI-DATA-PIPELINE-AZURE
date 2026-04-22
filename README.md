@@ -1,10 +1,20 @@
-# 🚖 NYC Taxi Data Engineering Pipeline (Azure | ADF | Databricks)
+# 🚖 NYC Taxi Data Pipeline on Azure (ADF | Databricks | Medallion Architecture)
 
 ## 📌 Overview
 
-This project implements an end-to-end, production-style data engineering pipeline on Azure using the NYC Taxi dataset. The solution is built using a **Medallion Architecture (Bronze, Silver, Gold)** to enable scalable, maintainable, and analytics-ready data processing.
+This project implements an end-to-end, production-style batch data engineering pipeline on Azure using the NYC Taxi dataset. The solution follows a **Medallion Architecture (Bronze, Silver, Gold)** to enable scalable, maintainable, and analytics-ready data processing.
 
-The pipeline ingests data from external sources, processes it using distributed compute in Databricks, and delivers curated datasets for business intelligence and advanced analytics.
+The pipeline ingests raw data, processes it using distributed compute in Databricks, and delivers curated datasets for business intelligence and analytics.
+
+---
+
+## ⚡ Key Highlights (Quick Summary)
+
+- Built end-to-end batch data pipeline on Azure using ADF and Databricks  
+- Implemented Medallion Architecture (Bronze → Silver → Gold)  
+- Designed scalable ingestion using parameterized ADF pipelines  
+- Performed distributed data processing using PySpark  
+- Delivered analytics-ready datasets for business reporting and decision-making  
 
 ---
 
@@ -20,11 +30,19 @@ The pipeline ingests data from external sources, processes it using distributed 
 
 ---
 
+## 📁 Repository Structure
+
+- `docs/` → Architecture diagrams and documentation  
+- `notebooks/` → Databricks notebooks (Bronze, Silver, Gold transformations)  
+- `README.md` → Project overview and documentation  
+
+---
+
 ## 🔹 Data Source
 
-* Dataset: NYC Taxi Data
-* Format: Parquet Files
-* Access Method: HTTPS
+- Dataset: NYC Taxi Data  
+- Format: Parquet Files  
+- Access Method: HTTPS  
 
 ---
 
@@ -36,23 +54,22 @@ A dynamic and parameterized ingestion pipeline is implemented to fetch data from
 
 ### Key Features:
 
-* Parameterized pipelines for flexible ingestion (e.g., dataset type, dates)
-* Scalable design to support multiple datasets
-* Automated ingestion using ADF activities
+- Parameterized pipelines for flexible ingestion (dataset type, date ranges)  
+- Scalable design to support multiple datasets  
+- Automated ingestion using ADF activities  
 
 ### Details:
 
-* Object Type: Parquet Files
-* Load Type: Batch Processing
-* Load Strategy: Full Load (parameter-driven ingestion)
-* Write Mode: Append (no data loss)
-* Transformations: None
-* Storage: Azure Data Lake Gen2
+- Load Type: Batch Processing  
+- Load Strategy: Full Load (parameter-driven ingestion)  
+- Write Mode: Append  
+- Transformations: None  
+- Storage: Azure Data Lake Storage Gen2  
 
 ### Purpose:
 
-* Preserve raw data in its original format
-* Enable reprocessing and auditing
+- Preserve raw data in original format  
+- Enable reprocessing and auditing  
 
 ---
 
@@ -60,62 +77,54 @@ A dynamic and parameterized ingestion pipeline is implemented to fetch data from
 
 ### Tool: Azure Databricks (PySpark)
 
-Raw data from Bronze is processed and transformed into a clean, structured format.
+Raw data is transformed into clean, structured datasets.
 
-### Transformations Applied:
+### Transformations:
 
-* Data cleansing and validation
-* Schema enforcement
-* Handling missing/null values
-* Deduplication
-* Data standardization
-* Derived column creation
-* Data enrichment
+- Data cleansing and validation  
+- Schema enforcement  
+- Handling null/missing values  
+- Deduplication  
+- Data standardization  
+- Derived columns  
 
 ### Details:
 
-* Object Type: Parquet Files
-* Load Type: Batch Processing
-* Load Strategy: Full Load
-* Write Mode: Overwrite (full refresh)
-* Data Model: Structured (cleaned datasets)
+- Load Type: Batch Processing  
+- Load Strategy: Full Load  
+- Write Mode: Overwrite  
+- Output: Cleaned structured datasets  
 
 ### Purpose:
 
-* Improve data quality
-* Create consistent and usable datasets
+- Improve data quality  
+- Create consistent datasets for downstream use  
 
 ---
 
 ## 🥇 Gold Layer – Business & Analytics Layer
 
-### Tool: Databricks (SQL / PySpark)
+### Tool: Azure Databricks (SQL / PySpark)
 
-The Gold layer transforms Silver data into business-ready datasets optimized for analytics.
+The Gold layer produces business-ready datasets optimized for analytics.
 
-### Transformations Applied:
+### Transformations:
 
-* Data integration across multiple datasets
-* Aggregations (e.g., trip counts, revenue metrics)
-* Business logic implementation
-* KPI calculations
+- Data integration across datasets  
+- Aggregations (trip counts, revenue metrics)  
+- Business logic implementation  
+- KPI calculations  
 
 ### Data Modeling:
 
-* Star Schema (Fact & Dimension tables)
-* Aggregated tables for reporting
-* Denormalized datasets for performance
-
-### Details:
-
-* Object Type: Delta Tables
-* Load Type: Batch Processing
-* Load Strategy: Derived from Silver (no direct ingestion)
+- Star schema (Fact & Dimension tables)  
+- Aggregated datasets  
+- Denormalized structures for performance  
 
 ### Purpose:
 
-* Enable fast querying and analytics
-* Serve as the source for BI tools and reporting
+- Enable fast analytical queries  
+- Deliver curated datasets for reporting and decision-making  
 
 ---
 
@@ -123,83 +132,59 @@ The Gold layer transforms Silver data into business-ready datasets optimized for
 
 The Gold layer supports:
 
-* 📈 Business Intelligence & Dashboards
-* 🔍 Ad-hoc SQL Queries
-* 🤖 Machine Learning use cases
+- Business Intelligence dashboards  
+- Ad-hoc SQL queries  
+- Analytical use cases  
 
 ---
 
 ## ⚙️ Technologies Used
 
-* Azure Data Factory (ADF)
-* Azure Data Lake Storage Gen2
-* Azure Databricks
-* PySpark
-* Parquet
-* Delta Lake
+- Azure Data Factory (ADF)  
+- Azure Data Lake Storage Gen2  
+- Azure Databricks  
+- PySpark  
+- Parquet  
+- Delta Lake  
 
 ---
 
 ## 🔐 Security & Authentication
 
-Secure access to Azure resources is implemented using a **Service Principal configured via Microsoft Entra ID (Azure Active Directory)**.
+Secure access is implemented using a **Service Principal via Microsoft Entra ID (Azure AD)**.
 
-### Implementation Steps:
+### Implementation:
 
-1. **Service Principal Creation**
+- Created Service Principal (App Registration)  
+- Configured Client ID and Secret  
+- Assigned **Storage Blob Data Contributor** role  
+- Enabled secure access using ABFSS protocol  
 
-   * Created an application in **Microsoft Entra ID (App Registrations)**
-   * Generated a **Client ID** and **Tenant ID**
+### Best Practices:
 
-2. **Client Secret Configuration**
-
-   * Created a **Client Secret** within the App Registration
-   * Used the secret for authentication in Databricks
-
-3. **Access Control (IAM) Setup**
-
-   * Assigned the Service Principal the role:
-
-     * **Storage Blob Data Contributor**
-   * Role applied at Azure Data Lake Storage Gen2 level using **IAM (Access Control)**
-
-4. **Databricks Integration**
-
-   * Configured secure access to Data Lake using:
-
-     * Service Principal (Client ID + Secret)
-     * ABFSS protocol for secure data access
-
-### Security Best Practices:
-
-* Credentials are not exposed in production workflows
-* Recommended to store secrets using:
-
-  * Databricks Secret Scope
-  * Azure Key Vault
-
-> This setup ensures secure, role-based access to storage and enables seamless integration between Azure services.
+- Secrets should be stored using:
+  - Azure Key Vault  
+  - Databricks Secret Scope  
 
 ---
 
-## 🚀 Key Highlights
+## 🚀 Key Highlights (Technical)
 
-* Dynamic, parameter-driven ingestion pipelines in ADF
-* End-to-end pipeline from raw ingestion to business-ready data
-* Implementation of Medallion Architecture
-* Scalable and modular design
-* Separation of concerns across data layers
-* Secure authentication using Service Principal
+- Dynamic and parameterized ingestion pipelines in ADF  
+- End-to-end pipeline from ingestion to analytics  
+- Implementation of Medallion Architecture  
+- Scalable and modular pipeline design  
+- Secure authentication using Service Principal  
 
 ---
 
 ## 📈 Future Enhancements
 
-* Implement incremental (delta) loading instead of full load
-* Extend Delta Lake to Silver layer
-* Add orchestration triggers and monitoring in ADF
-* Integrate Power BI dashboards
-* Implement CI/CD for pipeline deployment
+- Implement incremental (delta) loading  
+- Extend Delta Lake usage across layers  
+- Add orchestration triggers and monitoring  
+- Integrate Power BI dashboards  
+- Implement CI/CD for pipeline deployment  
 
 ---
 
@@ -211,4 +196,4 @@ This project demonstrates how to design and implement a scalable, secure, and pr
 
 ## 👨‍💻 Author
 
-Mayur Swami
+**Shailesh Sakule**
